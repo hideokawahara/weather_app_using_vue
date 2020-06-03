@@ -1,10 +1,20 @@
 <template>
   <div id="app" :class="typeof weather.main != 'undefined' && weather.main.temp > 16 ?
     'warm' : ''">
-    <main>
+    <main class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
       <div class="search-box">
+        <header class="masthead mb-auto">
+          <div class="inner">
+            <h3 class="masthead-brand">Cover</h3>
+            <nav class="nav nav-masthead justify-content-center">
+              <a class="nav-link active" href="#">Home</a>
+              <a class="nav-link" href="#">Features</a>
+              <a class="nav-link" href="#">Contact</a>
+            </nav>
+          </div>
+        </header>
         <input type="text" 
-               class="search-bar" 
+               class="search-bar col-auto" 
                placeholder="Search..." 
                v-model="query"
                @keypress="fetchWeather"
@@ -110,8 +120,9 @@ main {
 
 .search-box .search-bar {
   display: block;
-  width: 100%;
+  width: 700px;
   padding: 15px;
+  margin: auto;
 
   color: #313131;
   font-size: 20px;
