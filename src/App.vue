@@ -1,11 +1,14 @@
 <template>
-  <div id="app" :class="typeof weather.main != 'undefined' && weather.main.temp > 16 ?
+  <!-- <div id="app" :class="typeof weather.main != 'undefined' && weather.main.temp > 16 ?
+    'warm' : ''"> -->
+  <div id="app" :class="typeof weather.main != 'undefined' && weather.weather[0].main == 'Clear' ?
     'warm' : ''">
+
     <main class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
       <div class="search-box">
         <header class="masthead mb-auto">
           <div class="inner">
-            <h3 class="masthead-brand">Cover</h3>
+            <h1 class="masthead-brand">sunnY Vue</h1>
             <nav class="nav nav-masthead justify-content-center">
               <a class="nav-link active" href="#">Home</a>
               <a class="nav-link" href="#">Features</a>
@@ -15,7 +18,7 @@
         </header>
         <input type="text" 
                class="search-bar col-auto" 
-               placeholder="Search..." 
+               placeholder="国や地域を入力してみてね（※英語で）" 
                v-model="query"
                @keypress="fetchWeather"
                />
@@ -28,11 +31,12 @@
         </div>
         <div class="weather-box">
           <transition enter-active-class="animate__animated animate__flipInY" leave-active-class="animate__animated animate__zoomOutUp" appear>
-            <div>
-              <p class="clear" v-if="weather.weather[0].main == 'Clear'">晴れてるよー</p>
+            <!-- <div>
+              <p class="clear" v-if="weather.weather[0].main == 'Clear'">晴れてるよー!外に出ていこう！！</p>
               <p class="clouds" v-else-if="weather.weather[0].main == 'Clouds'">曇りだよー</p>
               <p class="rain" v-else-if="weather.weather[0].main == 'Rain'">雨！！</p>
-            </div>
+            </div> -->
+            <p :class="changeClass()">{{ changeText() }}</p>
           </transition>
           <div :class="typeof weather.main != 'undefined' && weather.main.temp > 16 ?
                 'red' : 'temp'">{{ Math.round(weather.main.temp) }}℃</div>
@@ -79,6 +83,32 @@ export default {
       let year = d.getFullYear();
 
       return `${year}年 ${month} ${date}日 ${day}`;
+    },
+    changeText() {
+      let result;
+      if (this.weather.weather[0].main == 'Clear') {
+        result = `晴れてるよー!外に出ていこう！！`;
+      } else if (this.weather.weather[0].main == 'Clouds') {
+        result = '曇りだよ';
+      } else if (this.weather.weather[0].main == 'Rain') {
+        result = '雨だねー。家でゆっくりしよ';
+      } else {
+        result = '';
+      }
+      return result;
+    },
+    changeClass() {
+      let result;
+      if (this.weather.weather[0].main == 'Clear') {
+        result = 'clear';
+      } else if (this.weather.weather[0].main == 'Clouds') {
+        result = 'clouds';
+      } else if (this.weather.weather[0].main == 'Rain') {
+        result = 'rain';
+      } else {
+        result = '';
+      }
+      return result;
     }
   }
 }
@@ -104,13 +134,22 @@ body {
 
 #app.warm {
   background-image: url('./assets/sunny-bg.jpg');
+  animation-name: pulse;
+  animation-duration: 0.24s;
 }
 
 main {
   min-height: 100vh;
   padding: 25px;
-
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.75));
+  border-radius: 70px;
+  width: 100%;
+	/* max-width: 768px; */
+  max-width: 600px;
+	margin: 0 auto;
+  padding: 0 15px 15px;
+  box-sizing: border-box;
+  background-image: linear-gradient(to bottom, rgba(223, 31, 31, 0.25), rgba(31, 199, 45, 0.534));
+  box-shadow: 0 10px 25px 0 rgba(94, 195, 226, 0.897), inset 0 10px 25px 0 rgba(191, 108, 212, 0.788);
 }
 
 .search-box {
@@ -227,5 +266,17 @@ p {
   animation-duration: 1s;
   color: violet;
   font-size: 60px;
+}
+
+h1 {
+  text-shadow: 3px 7px rgba(216, 54, 54, 0.25);
+  color: rgba(62, 248, 146, 0.644);
+  
+}
+
+nav a {
+  text-shadow: 1px 3px rgba(28, 148, 204, 0.568);
+  color: #f4f2f8d7;
+  font-weight: bold;
 }
 </style>
