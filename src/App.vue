@@ -3,7 +3,7 @@
     'warm' : ''"> -->
   <div id="app" :class="typeof weather.main != 'undefined' && weather.weather[0].main == 'Clear' ?
     'warm' : ''">
-
+    <p id="log"></p>
     <main class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
       <div class="search-box">
         <header class="masthead mb-auto">
@@ -18,7 +18,7 @@
         </header>
         <input type="text" 
                class="search-bar col-auto" 
-               placeholder="国や地域を入力してみてね（※英語で）" 
+               placeholder="現在晴れている国や地域を入力してみてね（※英語で）" 
                v-model="query"
                @keypress="fetchWeather"
                />
@@ -87,11 +87,11 @@ export default {
     changeText() {
       let result;
       if (this.weather.weather[0].main == 'Clear') {
-        result = `晴れてるよー!外に出ていこう！！`;
+        result = `大正解！！晴れてるよー!`;
       } else if (this.weather.weather[0].main == 'Clouds') {
-        result = '曇りだよ';
+        result = 'ざんねん〜曇りだよ';
       } else if (this.weather.weather[0].main == 'Rain') {
-        result = '雨だねー。家でゆっくりしよ';
+        result = '雨だねー';
       } else {
         result = '';
       }
@@ -112,6 +112,35 @@ export default {
     }
   }
 }
+
+const totalTime = 15000; // 10秒
+const oldTime = Date.now();
+
+const timerId = setInterval(() => {
+  const currentTime = Date.now();
+  // 差分を求める
+  const diff = currentTime - oldTime;
+
+  // 残りミリ秒を計算する
+  const remainMSec = totalTime - diff;
+  // ミリ秒を整数の秒数に変換する
+  const remainSec = Math.ceil(remainMSec / 1000);
+
+  let label = `残り${remainSec}秒`;
+
+  // 0秒以下になったら
+  if (remainMSec <= 0) {
+    // タイマーを終了する
+    clearInterval(timerId);
+
+    // タイマー終了の文言を表示
+    label = '終了!';
+  }
+
+  // 画面に表示する
+  document.querySelector('#log').innerHTML = label;
+}, 1000);
+
 </script>
 
 <style>
@@ -279,4 +308,8 @@ nav a {
   color: #f4f2f8d7;
   font-weight: bold;
 }
+
+#log {
+      font-size: 60px;
+    }
 </style>
